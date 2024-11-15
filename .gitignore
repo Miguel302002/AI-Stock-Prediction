@@ -1,0 +1,16 @@
+# Ignore virtual environment folder
+venv/
+
+# Ignore Python bytecode files
+__pycache__/
+*.pyc
+
+# Ignore data files (adjust based on your project needs)
+*.csv
+*.json
+
+# Ignore Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore VS Code settings (optional)
+.vscode/
