@@ -1,0 +1,9 @@
+# required libraries for the project
+# run "pip install -r requirements.txt" in the terminal to get the requirements
+
+pandas
+numpy
+scikit-learn
+tensorflow  # If using LSTM
+torch  # If using PyTorch for Graph Neural Networks
+matplotlib
