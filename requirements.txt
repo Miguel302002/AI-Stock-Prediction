@@ -7,3 +7,4 @@ scikit-learn
 tensorflow  # If using LSTM
 torch  # If using PyTorch for Graph Neural Networks
 matplotlib
+seaborn
