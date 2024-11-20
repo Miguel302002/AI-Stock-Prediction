@@ -3,46 +3,46 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'  # Suppress TensorFlow messages
 
 import pandas as pd
 import numpy as np
-from tensorflow.keras.models import Sequential # type: ignore
-from tensorflow.keras.layers import LSTM, Dense, Dropout, Input # type: ignore
-from tensorflow.keras.optimizers import Adam # type: ignore
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import LSTM, Dense, Dropout, Input, Bidirectional
+from tensorflow.keras.optimizers import Adam
 from sklearn.utils.class_weight import compute_class_weight
 from evaluation import evaluate_model
 
 # Load preprocessed data
-data = pd.read_csv('processed_data.csv')
-print("Preprocessed data loaded.")
+data = pd.read_csv('processed_data_pca.csv')
+print("Preprocessed data with PCA loaded.")
 
 # Ensure 'Date' is in datetime format
 data['Date'] = pd.to_datetime(data['Date'])
 
 # Define features
-features = ['Close', 'MA5', 'MA10', 'volatility']
+pca_columns = [col for col in data.columns if 'PC' in col]
 
 # Define the target variable: next day's movement (1 for up, 0 for down)
 data = data.sort_values(by=['Ticker', 'Date'])
-data['Target'] = (data.groupby('Ticker')['Close'].shift(-1) > data['Close']).astype(int)
+data['Close'] = data.groupby('Ticker')['PC1'].shift(-1)  # Assuming PC1 is most correlated with 'Close'
 
-# Drop the last row of each group with NaN target
-grouped = data.groupby('Ticker')
-indices_to_drop = grouped.tail(1).index
-data = data.drop(indices_to_drop).reset_index(drop=True)
-print("Target variable created and last rows dropped.")
+data['Target'] = (data['Close'] > data.groupby('Ticker')['Close'].shift(1)).astype(int)
+
+# Drop rows with NaN in 'Target'
+data = data.dropna(subset=['Target']).reset_index(drop=True)
+print("Target variable created.")
 
 # Parameters
-time_steps = 20  # Experiment with different values
+time_steps = 20  # Adjust sequence length as needed
 X = []
 y = []
 
 # Create sequences for each ticker separately
 for ticker in data['Ticker'].unique():
     ticker_data = data[data['Ticker'] == ticker]
-    scaled_features = ticker_data[features].values
+    features = ticker_data[pca_columns].values
     targets = ticker_data['Target'].values
 
     # Create sequences
-    for i in range(time_steps, len(scaled_features)):
-        X.append(scaled_features[i - time_steps:i])
+    for i in range(time_steps, len(features)):
+        X.append(features[i - time_steps:i])
         y.append(targets[i])
 
 X = np.array(X)
@@ -65,29 +65,31 @@ class_weights_array = compute_class_weight('balanced', classes=unique_classes, y
 class_weights = {int(cls): float(weight) for cls, weight in zip(unique_classes, class_weights_array)}
 print("Class weights:", class_weights)
 
-# Build LSTM model
+# Build LSTM model with Bidirectional layers
 model = Sequential()
 model.add(Input(shape=(X_train.shape[1], X_train.shape[2])))
-model.add(LSTM(128, activation='relu', return_sequences=True))
+model.add(Bidirectional(LSTM(128, activation='relu', return_sequences=True)))
 model.add(Dropout(0.3))
-model.add(LSTM(64, activation='relu'))
+model.add(Bidirectional(LSTM(64, activation='relu')))
 model.add(Dropout(0.3))
 model.add(Dense(1, activation='sigmoid'))
+
+# Compile the model
 model.compile(optimizer=Adam(learning_rate=0.0005), loss='binary_crossentropy', metrics=['accuracy'])
 
 # Early stopping
-from tensorflow.keras.callbacks import EarlyStopping # type: ignore
+from tensorflow.keras.callbacks import EarlyStopping
 
 early_stopping = EarlyStopping(
     monitor='val_loss',
-    patience=10,  # Increased patience to allow more epochs
+    patience=10,
     restore_best_weights=True
 )
 
 # Train the model
 history = model.fit(
     X_train, y_train,
-    epochs=100,
+    epochs=50,
     batch_size=32,
     class_weight=class_weights,
     validation_data=(X_test, y_test),
