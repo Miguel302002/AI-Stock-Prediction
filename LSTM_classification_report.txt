@@ -2,12 +2,12 @@ Classification Report for LSTM:
 
               precision    recall  f1-score   support
 
-           0       0.47      0.79      0.59       577
-           1       0.54      0.22      0.31       658
+           0       0.64      0.71      0.67       533
+           1       0.75      0.68      0.71       672
 
-    accuracy                           0.48      1235
-   macro avg       0.50      0.50      0.45      1235
-weighted avg       0.51      0.48      0.44      1235
+    accuracy                           0.69      1205
+   macro avg       0.69      0.69      0.69      1205
+weighted avg       0.70      0.69      0.69      1205
 
-Accuracy: 0.4834008097165992
-ROC AUC Score: 0.5123714001253734
+Accuracy: 0.6912863070539419
+ROC AUC Score: 0.7583059724828016
