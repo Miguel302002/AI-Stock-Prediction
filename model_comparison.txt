@@ -29,8 +29,8 @@ ROC AUC Score: 0.5079810653230723
 Model: LSTM
 ==================================================
 Accuracy File:
-LSTM Model Loss: 0.6950197219848633
-LSTM Model Accuracy: 0.483400821685791
+LSTM Model Loss: 0.6943413019180298
+LSTM Model Accuracy: 0.4955465495586395
 
 Confusion Matrix: LSTM_confusion_matrix.png (image file saved)
 
@@ -39,15 +39,15 @@ Classification Report for LSTM:
 
               precision    recall  f1-score   support
 
-           0       0.47      0.79      0.59       577
-           1       0.54      0.22      0.31       658
+           0       0.47      0.70      0.56       577
+           1       0.55      0.32      0.40       658
 
-    accuracy                           0.48      1235
-   macro avg       0.50      0.50      0.45      1235
-weighted avg       0.51      0.48      0.44      1235
+    accuracy                           0.50      1235
+   macro avg       0.51      0.51      0.48      1235
+weighted avg       0.51      0.50      0.48      1235
 
-Accuracy: 0.4834008097165992
-ROC AUC Score: 0.5123714001253734
+Accuracy: 0.49554655870445347
+ROC AUC Score: 0.49688673729014443
 
 
 --------------------------------------------------
