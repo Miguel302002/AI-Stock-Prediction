@@ -1,10 +1,7 @@
-# required libraries for the project
-# run "pip install -r requirements.txt" in the terminal to get the requirements
-
-pandas
-numpy
-scikit-learn
-tensorflow  # If using LSTM
-torch  # If using PyTorch for Graph Neural Networks
-matplotlib
-seaborn
+pandas==1.5.0
+numpy==1.21.0
+scikit-learn==1.0
+tensorflow==2.8.0
+matplotlib==3.4.0
+seaborn==0.11.0
+joblib==1.0.0
