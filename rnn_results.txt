@@ -1,0 +1,1 @@
+RNN Model Accuracy: 0.9818930041152263
