@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import tensorflow as tf
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, mean_squared_error, mean_absolute_error
 import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
@@ -64,9 +64,21 @@ y_pred = (y_pred_prob > 0.5).astype(int)  # Convert probabilities to binary pred
 accuracy = accuracy_score(y_test, y_pred)
 print(f"RNN Model Accuracy: {accuracy}")
 
-# Save accuracy to a text file
+# Calculate additional metrics
+mse = mean_squared_error(y_test, y_pred_prob)
+mae = mean_absolute_error(y_test, y_pred_prob)
+rmse = np.sqrt(mse)
+
+print(f"Mean Squared Error (MSE): {mse}")
+print(f"Mean Absolute Error (MAE): {mae}")
+print(f"Root Mean Squared Error (RMSE): {rmse}")
+
+# Save accuracy and additional metrics to a text file
 with open('rnn_results.txt', 'w') as f:
     f.write(f"RNN Model Accuracy: {accuracy}\n")
+    f.write(f"Mean Squared Error (MSE): {mse}\n")
+    f.write(f"Mean Absolute Error (MAE): {mae}\n")
+    f.write(f"Root Mean Squared Error (RMSE): {rmse}\n")
 
 # Save y_test and y_pred
 np.save('rnn_y_test.npy', y_test)
