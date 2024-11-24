@@ -15,3 +15,11 @@ __pycache__/
 
 # Ignore VS Code settings (optional)
 .vscode/
+
+/lstm_vs_rf/comparison
+/lstm_vs_rf/evaluation_results
+/lstm_vs_rf/logs
+/lstm_vs_rf/models
+/lstm_vs_rf/plots
+/lstm_vs_rf/predictions
+/lstm_vs_rf/processed_data
